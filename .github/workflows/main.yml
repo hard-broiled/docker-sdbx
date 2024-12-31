@@ -1,4 +1,4 @@
-name: ci
+name: dotnet-docker-example-ci
 
 on:
   push:
@@ -21,10 +21,10 @@ jobs:
       - name: Build and test
         uses: docker/build-push-action@v6
         with:
-          platforms: linux/amd64,linux/arm64
           target: build
           file: dotnet/Dockerfile
           load: true
+          build-args: DEBUG=true
 
       - name: Build and push
         uses: docker/build-push-action@v6
