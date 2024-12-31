@@ -5,9 +5,9 @@ VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dotnet", "dotnet", "{11C3F3DD-2A4C-4A37-AA8E-9A0ED7F9DC43}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "myWebApp", "dotnet\src\myWebApp.csproj", "{C83E3D82-FF16-455D-B48C-4DAC8023871C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "myWebApp", "src\myWebApp.csproj", "{C83E3D82-FF16-455D-B48C-4DAC8023871C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tests", "dotnet\tests\tests.csproj", "{3797F376-A9D6-4D66-B3E8-CBB2E2DB1844}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tests", "tests\tests.csproj", "{3797F376-A9D6-4D66-B3E8-CBB2E2DB1844}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
