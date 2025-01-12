@@ -1,4 +1,4 @@
-# Original use was the  official Ubuntu image as the base image, for more optimal size the gcc latest image is used as the base
+# Original use was the official Ubuntu image as the base image, for more optimal size the gcc latest image is used as the base
 FROM gcc:latest
 
 # Set the working directory in the container
