@@ -1,4 +1,4 @@
-name: main-ci-pipeline
+name: cpp-docker-example-ci
 
 on:
   push:
