@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: docker-c-plus-plus-demo
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: ok-api
+  template:
+    metadata:
+      labels:
+        service: ok-api
+    spec:
+      containers:
+        - name: ok-api-service
+          image: nldfdocker/docker-sdbx
+          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-entrypoint
+  namespace: default
+spec:
+  type: NodePort
+  selector:
+    service: ok-api
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30001

@@ -1,0 +1,12 @@
+services:
+  ok-api:
+    image: ok-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:30001"
+    develop:
+      watch:
+        - action: rebuild
+          path: .
