@@ -10,7 +10,6 @@ WORKDIR /source/src
 RUN echo "TARGETARCH is: ${TARGETARCH}" 
 RUN echo "Resolved architecture: ${TARGETARCH/amd64/x64}"
 RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
-    && dotnet restore \
     && dotnet publish -a ${TARGETARCH/amd64/x64} --no-restore --use-current-runtime --self-contained false -o /app
 RUN dotnet test /source/tests
 
