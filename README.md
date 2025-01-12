@@ -1,18 +1,17 @@
 # Overview
 This quick project serves as a very light example of utilizing Docker and GitHub Actions as a part of a development workflow for a C++ API server. The contents below preserve the original readme information related to the project and associated tutorial.
 
-This quick example utilizes a simple docker container to support development of this C++ api server, and leverages GitHub Actions for quick CI support. The compose file is set up to support Docker Watch to expand the flexibility of the container as a development environment. There is also a simple Kubernetes YAML file to support deploying the API to  a local K8s instance.
+This quick example utilizes a simple docker container to support development of this C++ api server, and leverages GitHub Actions for quick CI functionality. The compose file is set up to support Docker Watch to expand the flexibility of the container as a development environment. There is also a simple Kubernetes YAML file to support deploying the API to a simple K8s instance.
 As this is an extremely simple development project, the associated Docker, Actions, and k8s infrastructure are also very slim.
 
-Adding to the documentation below with additional information.
-
 ### [Docker Compose File](compose.yml)
-This simple compose file creates a single APi service. The compose file utilizes the Dockerfile located at the root of the project directory. The currently included configurations include mapping the host and container ports to 8080, and enabling watch as a part of a development workflow.
+This simple compose file creates a single API service. The compose file utilizes the Dockerfile located at the root of the project directory. The currently included configurations include mapping the host and container ports to 8080, and enabling watch as a part of a development workflow.
 The end result is the simple API service is hosted within the created container as defined in the Dockerfile, as executed by the compose.yml file.
 The *it worked on my machine* version of this functionality can be acheived by running simple commands such as the below examples. The first to build the image in a detached process, the other to simply start the container back up if previous shut down.
 ```
-docker compose up --build -d
-docker compose up
+docker compose up --build -d # building the image file anew and detaching the container composition process
+
+docker compose up # creating the container from the cached image file
 ```
 
 ### [cpp-docker-k8s.yml](cpp-docker-k8s.yml)
@@ -24,9 +23,9 @@ kubectl apply -f cpp-docker-k8s.yml # deploy the application to k8s
 kubectl get deployments # confirm the deployment 
 
 kubectl get services # verify the new service-entrypoint service
-
-
 ```
+
+
 
 ---------------------------
 ## Original README
