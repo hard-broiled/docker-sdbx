@@ -5,11 +5,12 @@ FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS build
 ARG TARGETARCH
 COPY . /source
 WORKDIR /source/src
+
 # Verifying targetarch resolution value
 RUN echo "TARGETARCH is: ${TARGETARCH}" 
 RUN echo "Resolved architecture: ${TARGETARCH/amd64/x64}"
 RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
-    dotnet restore \
+    && dotnet restore \
     && dotnet publish -a ${TARGETARCH/amd64/x64} --no-restore --use-current-runtime --self-contained false -o /app
 RUN dotnet test /source/tests
 
