@@ -1,5 +1,5 @@
 <a id="readme-top"></a>
-<!-- docker-python-example 
+<!-- docker-c++-example 
 C++ codebase pulled from Docker example guide
 -->
 
