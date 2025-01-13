@@ -1,5 +1,7 @@
 <a id="readme-top"></a>
 
+<!-- Initial ReadMe based documentation for the docker-sdbx repo. This may eventually be matured into a corresponding Wiki page on the repository. The primary result of this effort would be to showcase a created Wiki. As this isn't a collaborative project, the actual benefits of this effort are minimal, due to scale. -->
+
 <!-- Shields Section -->
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
@@ -23,6 +25,7 @@
             <li><a href="#local-vs-cloud">Local Docker vs Cloud Orchestration Offerings</a></li>
             <li><a href="#tech-stacks">Considered Technology Stacks</a></li>
             <li><a href="#cicd-support">On CI/CD Support</a></li>
+            <li><a href="#feat-branches">Highlighted Feature Branches</a></li>
         </ul>
         </li>
     </ol>
@@ -43,6 +46,10 @@ I would describe this repo and contained efforts as
 - 10% Development considerations 
 - 20% Ops considerations
 - 70% Comprehensive documentation considerations.
+
+For any given feature branch, the enhancement and optimization of the CI process will be the most significant effort in the long term after documentation of each feature branch has been initialized. As the full set of feature branches will cover a broad set of development technologies, this should yield a useful and demonstrative collection of optimal implementations of CI for many development contexts that are utilizing Docker in the development workflow.
+
+This is currently considered the primary value output of this repository.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -82,6 +89,10 @@ Some quick taxonomy related to this project.
 
 Primary development technologies to be targeted at this time (in no particular order) will include dotnet/C#, Python, Go, and C++ while also considering additional front-end specific technologies. This should be considered a living list.
 
+<!-- emphasizing this section in particular -->
+    Please note!
+    Several of the contained app/feature codebases are not my own work. They have been pulled from example repositories or tutorial efforts related to the primary technologies contained in the related codebases. These were leveraged to decrease the turn-around time for creating viable Docker images/containers in more numerous scenarios.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -89,7 +100,9 @@ Primary development technologies to be targeted at this time (in no particular o
 
 Following the previous statement regarding zero-cost implementations, GitHub and GHA were chosen as the repository host and CI/CD support vendors. 
 
-CI has been prioritized for each feature branch to support the ability to produce related and successful Docker Images for the contained code bases.
+The primary consideration for CI has been ensuring each feature branch can produce related and successful Docker Images/Containers for the contained code bases. Any contained GHA pipelines are set to trigger on successful merges to the contained feature branch only. 
+
+As mentioned previously, enhancement and optimization of the CI process will be the most significant effort in the long term after documentation of each feature branch has been initialized.
 
 In this scenario, "CD" won't be fully built out in many aspects. The initial purpose will be targeting smaller scale orchestration implementations (k3s w/ docker backend etc.) to keep things light and quick. There is room for growth into more mature service providers (ArgoCD, Ansible, etc.) for stability and CD-specific reproducibility and configuration. In the sem vein, there is immense room for growth into other CD areas including observability, monitoring, security, scalability, distribution, etc. 
 As the current goal isn't targeting public facing CD, it hasn't been prioritized at this time. 
@@ -101,6 +114,23 @@ Also, juggling deployment agents, and k8s implementations on the Azure free tier
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
+### Highlighted Feature Branches <a id="feat-branches"></a>
+
+Below are the currently highlighted feature branches for consideration. Please note each will have it's own readme to further emphasize important details or considerations of the effort, as well as takeaways and routes for improvement/maturation of a related project or effort utilizing the contained technologies.
+
+ - [.Net Docker Example][.net-feature-url]
+ - [Javascript Docker Example][jscript-feature-url]
+ - [Python Docker Example][python-feature-url]
+ - [C++ Docker Example][cpp-feature-url]
+
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
 <!-- Links, etc. -->
+[.net-feature-url]: https://github.com/hard-broiled/docker-sdbx/tree/feature/dotnet-docker-example
+[cpp-feature-url]: https://github.com/hard-broiled/docker-sdbx/tree/feature/cpp-docker-example
+[jscript-feature-url]: https://github.com/hard-broiled/docker-sdbx/tree/feature/javascript-docker-example
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/jonathan-boyle/
+[python-feature-url]: https://github.com/hard-broiled/docker-sdbx/tree/feature/python-docker-example
