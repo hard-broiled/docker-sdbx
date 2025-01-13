@@ -1,4 +1,53 @@
-# Overview
+<a id="readme-top"></a>
+<!-- docker-python-example 
+C++ codebase pulled from Docker example guide
+-->
+
+<!-- Shields Section -->
+[![LinkedIn][linkedin-shield]][linkedin-url]
+
+<div align="center">
+    <h2 align="center">C++ Dockerized Workflow Example w/ Notes on Optmization</h2>
+    <p align="center">
+        Feature branch utilized for rapid prototyping and testing of C++ specific Docker functionality, with emphasis on optimized CI practices and corresponding GHA CI support.
+    </p>
+</div>
+
+
+<!-- TABLE OF CONTENTS -->
+<div>
+    <details>
+    <summary>Table of Contents</summary>
+    <ul>
+        <li>
+        <a href="#overview">Project Overview</a>
+        <ul>
+            <li><a href="#contrsuc">Under Construction</a></li>
+        </ul>
+        </li>
+    </ul>
+    </details>
+</div>
+
+
+# Overview <a id="overview"></a>
+
+README is currently **Under Construction**
+
+The contained application is a simple C++ web application pulled from [C++ Language Guide](https://docs.docker.com/language/cpp/).
+
+Initial versions of Docker related files generated via ```docker init```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+<!-- Links, etc. -->
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://www.linkedin.com/in/jonathan-boyle/
+
+
+
+# General Info
 This quick project serves as a very light example of utilizing Docker and GitHub Actions as a part of a development workflow for a C++ API server. The contents below preserve the original readme information related to the project and associated tutorial.
 
 This quick example utilizes a simple docker container to support development of this C++ api server, and leverages GitHub Actions for quick CI functionality. The compose file is set up to support Docker Watch to expand the flexibility of the container as a development environment. There is also a simple Kubernetes YAML file to support deploying the API to a simple K8s instance.
@@ -24,82 +73,3 @@ kubectl get deployments # confirm the deployment
 
 kubectl get services # verify the new service-entrypoint service
 ```
-
-
-
----------------------------
-## Original README
-A simple HTTP server implemented in C++ using the C++ REST SDK. It listens for incoming HTTP GET requests and responds with a JSON message. This is for Docker's [C++ Language Guide](https://docs.docker.com/language/cpp/).
-
-## API
-
-The server only supports the HTTP GET method at the moment. When a GET request is received, the server responds with a JSON object:
-
-```json
-{
-    "message": "OK"
-}
-```
-
-## Running with Docker Compose
-
-Below is the [Dockerfile](Dockerfile) for the C++ application:
-
-```Dockerfile
-# Use the official Ubuntu image as the base image
-FROM ubuntu:latest
-
-# Set the working directory in the container
-WORKDIR /app
-
-# Install necessary dependencies
-RUN apt-get update && apt-get install -y \
-    g++ \
-    libcpprest-dev \
-    libboost-all-dev \
-    libssl-dev \
-    cmake
-
-# Copy the source code into the container
-COPY ok_api.cpp .
-
-# Compile the C++ code
-RUN g++ -o ok_api ok_api.cpp -lcpprest -lboost_system -lboost_thread -lboost_chrono -lboost_random -lssl -lcrypto
-
-# Expose the port on which the API will listen
-EXPOSE 8080
-
-# Command to run the API when the container starts
-CMD ["./ok_api"]
-```
-
-To run this application using Docker Compose, you'll need to create a `compose.yml` file.
-
-Here's the `compose.yml` file:
-
-```yaml
-services:
-  ok-api:
-    image: ok-api
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-```
-
-To build and run the Docker image using Docker Compose, use the following command:
-
-```bash
-docker-compose up
-```
-
-This will build the Docker image and then run it, mapping the container's port 8080 to port 8080 on the host machine. You can then access the API by visiting `http://localhost:8080` in your web browser.
-
-## Contributing
-
-Any feedback and contributions are welcome! Please open an issue before submitting a pull request.
-
-## License
-
-[MIT License](LICENSE)
