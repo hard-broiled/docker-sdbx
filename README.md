@@ -31,7 +31,6 @@
     </ul>
     </details>
 </div>
-<br />
 
 
 # Overview <a id="overview"></a>
