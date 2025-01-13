@@ -89,8 +89,8 @@ Some quick taxonomy related to this project.
 Primary development technologies to be targeted at this time (in no particular order) will include dotnet/C#, Python, Go, and C++ while also considering additional front-end specific technologies. This should be considered a living list.
 
 <!-- emphasizing this section in particular -->
-    Please note!
-    Several of the contained app/feature codebases are not my own work. They have been pulled from example repositories or tutorial efforts related to the primary technologies contained in the related codebases. These were leveraged to decrease the turn-around time for creating viable Docker images/containers in more numerous scenarios.
+***Please note!***
+Several of the contained app/feature codebases are not my own work. They have been pulled from example repositories or tutorial efforts related to the primary technologies contained in the related codebases. These were leveraged to decrease the turn-around time for creating viable Docker images/containers in more numerous scenarios.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
