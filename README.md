@@ -17,7 +17,7 @@
 <div>
     <details>
     <summary>Table of Contents</summary>
-    <ol>
+    <ul>
         <li>
         <a href="#overview">Project Overview</a>
         <ul>
@@ -28,7 +28,7 @@
             <li><a href="#feat-branches">Highlighted Feature Branches</a></li>
         </ul>
         </li>
-    </ol>
+    </ul>
     </details>
 </div>
 <br />
