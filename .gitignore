@@ -1,7 +1,5 @@
-# Local development files, compose file
+# Local development files
 db/
-compose.yaml
-
 
 # VSCode Files
 **/.vscode/

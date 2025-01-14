@@ -1,26 +1,38 @@
 # syntax=docker/dockerfile:1
 
-# Build Stage
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS build
-ARG TARGETARCH
-COPY . /source
-WORKDIR /source/src
+# Base image
+ARG DOTNET_VERSION=6.0
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine AS base
+WORKDIR /source
 
-# Verifying targetarch resolution value
-RUN echo "TARGETARCH is: ${TARGETARCH}" 
-RUN echo "Resolved architecture: ${TARGETARCH/amd64/x64}"
+# Build Stage
+FROM base AS build
+ARG TARGETARCH
+#-- distinct copy and restore of *.csproj files
+COPY src/*.csproj src/
+COPY tests/*.csproj tests/
+# COPY NuGet.Config ./ # included as an example for projects that may leverage a nuget.config file
 RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
-    dotnet publish -a ${TARGETARCH/amd64/x64} --use-current-runtime --self-contained false -o /app
-RUN dotnet test /source/tests
+    dotnet restore src/*.csproj
+COPY . .
+WORKDIR /source/src
+RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
+    dotnet publish -a ${TARGETARCH/amd64/x64} --no-restore --use-current-runtime --self-contained false -o /app
+
+# Test Stage
+FROM base AS test
+COPY --from=build /source /source
+# Run unit tests
+RUN dotnet test /source/tests --verbosity detailed
 
 # Development Stage
-FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS development
+FROM base AS development
 COPY . /source
 WORKDIR /source/src
 CMD dotnet run --no-launch-profile
 
-# Live Stage
-FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine AS final
+# Runtime Stage
+FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine AS final
 WORKDIR /app
 COPY --from=build /app .
 ARG UID=10001
