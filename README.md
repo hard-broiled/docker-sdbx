@@ -32,7 +32,11 @@ dotnet codebase pulled from Docker .Net Language Guide
             </ul>
             <li><a href="#compose">Compose Considerations</a></li>
             <li><a href="#gha-cicd">CI & CD via GitHub Actions</a></li>
+            <li><a href="#k8s">docker-dotnet-kubernetes.yaml Considerations</a></li>
             <li><a href="#takeaways">Final Takeaways and Long-term Considerations</a></li>
+            <ul>
+                <li><a href="#orchestration"></a></li>
+            </ul>
         </ul>
         </li>
     </ul>
@@ -46,7 +50,7 @@ This feature branch addresses the situation of a development workflow focused on
 
 There is some initial work we can do to save ourselves future technical debt and pain. First, we note that this app is currently running on dotnet 6.0. This is an older version of dotnet, already past it's EoS date, and will likely become a focus of a migration effort in the future.
 
-Second, I clarify here that for development centric purposes docker compose can *currently* serve just fine as an initial development environment focused deployment/orchestration tool. Eventually the target is to build out this workflow to connect to a hosted k3s instance, and ideally use a configuration tool like Ansbile to ensure consistency.
+Second, I clarify here that for development centric purposes docker compose can *currently* serve just fine as an initial development environment focused deployment/orchestration tool. Eventually the target is to build out this workflow to connect to a hosted miniaturized Kubernetes instance, and ideally use a configuration tool like Ansbile to ensure consistency.
 
 While the original .NET project files for this branch are based on an available guide at the Docker documentation site, there are additions and enhancements in several files. The goal of these items is to improve the future development and ops support for this app, optimize image build actions, and prepare the application for more advanced orchestration support.
 
@@ -224,17 +228,44 @@ There will be natural limitations to the localized testing of GHA workflows, as 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
+## CI & CD via GitHub Actions <a id="k8s"></a>
+
+Placeholder for write-up on current kubernetes configuration.
+
+Quick notes:
+ - variable usage
+ - sensitive information
+ - load balancing
+ - introducing 
+
+File link [docker-dotnet-kubernetes.yaml](docker-dotnet-kubernetes.yaml)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
 ## Final Takeaways and Long-term Considerations <a id="takeaways"></a>
 
 With the included improvements and considerations, this project and associated workflow is in a more mature state and ready to support a more complicated app development scenario. When considering a more complex application, we can expect multiple containers for distributed microservices versus a monolithic container app, while also expecting more complex docker network configurations to accomodate these distributed services. Additionally, we should expect enhanced volume configurations to support a more complex database, and persistent datastore needs. There could potentially be a conversation regarding volumes vs bind mounts if the use case of this application or the development workflow moves in a direction where we want to specify the persistence directory outside of the ```var/lib/docker/volumes``` default, but I don't think this is likely. 
 
-As our implementation complexity goes up, our considerations should also cover observability and monitoring of our containers and the k3s instance being used to orchestrate and host the application. Maintaining application up-time, as well as critical internal service monitoring will be a key consideration.
+As our implementation complexity goes up, our considerations should also cover observability and monitoring of our containers and the Kubernetes instance being used to orchestrate and host the application. Maintaining application up-time, as well as critical internal service monitoring will be a key consideration.
 
-#### Why k3s?
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-In short, k3s is being targeted as a means to showcase preparing the newly containerized application for use at-scale. Obviously the current app codebase is not intended for such a use case, but building out the associated development workflow is a viable consideration for a more mature application.
 
-There are several options for small scale k8s functionality, and others may be explored in the future.
+#### Light-weight Production-close Orchestration  <a id="orchestration"></a>
+
+***Under Construction***
+In short, the desired solution is a resource friendly zero-cost option that puts the workflow close to a production-ready end result, hence the term "Production-close".
+
+There are many flavors that satisfy several if not all of these contraints on the market, and there is an on-going process to choose the best option given all considerations for these example projects.
+
+Current considerations:
+ - Kind: oriented towards CI environments for testing
+ - MicroK8s/Minikube: oriented towards local development on one workstation
+ - K3s
+ - Kubeadm
+ - Docker Desktop Single Node K8s (current utilization with [docker-dotnet-kubernetes.yaml](docker-dotnet-kubernetes.yaml))
+    - Noting that this wouldn't directly satisfy the "production-close" target, but it is currently the fastest implementation route that allows a step closer to a k8s-like workflow and away from bare compose or Docker Swarm support.
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
