@@ -35,7 +35,7 @@ dotnet codebase pulled from Docker .Net Language Guide
             <li><a href="#k8s">docker-dotnet-kubernetes.yaml Considerations</a></li>
             <li><a href="#takeaways">Final Takeaways and Long-term Considerations</a></li>
             <ul>
-                <li><a href="#orchestration"></a></li>
+                <li><a href="#orchestration">Light-weight Production-close Orchestration</a></li>
             </ul>
         </ul>
         </li>
@@ -255,6 +255,7 @@ As our implementation complexity goes up, our considerations should also cover o
 #### Light-weight Production-close Orchestration  <a id="orchestration"></a>
 
 ***Under Construction***
+
 In short, the desired solution is a resource friendly zero-cost option that puts the workflow close to a production-ready end result, hence the term "Production-close".
 
 There are many flavors that satisfy several if not all of these contraints on the market, and there is an on-going process to choose the best option given all considerations for these example projects.
