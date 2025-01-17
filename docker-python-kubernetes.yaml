@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: fastapi-service
-          image: nldfdocker/docker-sdbx:fastapilatest
+          image: nldfdocker/docker-sdbx:exmplfastapilatest
           imagePullPolicy: Always
           env:
             - name: POSTGRES_PASSWORD

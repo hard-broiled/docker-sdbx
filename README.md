@@ -34,9 +34,17 @@ Python codebase pulled from Docker example guide
 
 README is currently **Under Construction**
 
-The contained application is a simple Python web application pulled from [Docker Docs](https://docs.docker.com/language/python/containerize/).
+Topic notes:
+ - .venv and dev docker container workflow discussion
+ - Dockerfile considerations 
+    - emphasis on performance currently, route for future growth, docker init handles this simple case well
+ - Compose file considerations
+    - similar to dockerfile; end of road for compose vs orchestration
+ - Prod workflow considerations for handling secrets etc.
+ - K8s files Considerations
+    - Why 2
+    - Optimizing
 
-Initial versions of Docker related files generated via ```docker init```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -44,3 +52,6 @@ Initial versions of Docker related files generated via ```docker init```
 <!-- Links, etc. -->
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/jonathan-boyle/
+
+The contained application is a simple Python web application pulled from [Docker Docs](https://docs.docker.com/language/python/containerize/).
+Initial versions of Docker related files generated via ```docker init```
