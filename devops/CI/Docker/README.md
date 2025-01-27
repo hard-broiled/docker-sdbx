@@ -164,9 +164,53 @@ GitHub Actions Packages permissions:
 
 <h2 align="center"> CI for Application Build & Unit Testing <a id="app b&ut"></a></h2>
 
-Under Construction
+        Under construction TODO
 
-    - Project Dependent
+The high level goals of this area of the CI workflow are to ensure that the codebase is able to successfully build, pass all included unit tests, and pass any included static/dynamic code scanning utilities leveraged by the project. The scanning elements of this process are external to the docker container and development/test environment, and will be considered in a separate conversation accordingly. 
+
+Let's consider a simplified (not comprehensive) example of a docker container that leverages multi-stage builds to target the following stages:
+- Development Build
+- Development Unit Test
+- Development Push Stage
+- Live Push Stage
+
+```
+# syntax=docker/dockerfile:1
+
+### Dev and live base images for situation where best practices have specific base images for each use
+FROM dev_base_image AS dev_base
+FROM live_base_image AS live_base
+
+### build from the dev_build image
+# Dev Build Stage
+FROM dev_base AS dev_build
+
+### Execute units tests leveraging development base image
+# Dev Test Stage
+FROM dev_base AS dev_test
+
+### Start-up elements from development build after testing 
+# Development Push Stage
+FROM dev_build AS development
+
+### Start-up elements from tested build stage in specified live image
+# Live Push Stage
+FROM live_base AS live
+```
+
+When we look to leverage the above docker file as a part of our CI process, we can target the specific 'dev_build' and 'dev_test' stages to support our build and test functionality. 
+This will allow us to ensure that all requirements for each stage of the CI process are fulfilled and validated against consistent versions of the application being built and test as configured by the related stages within the docker container. We can additionally add to the functionality contained within the dockerfile to support code coverage, static&dynamic code scanning, and other functionality as required by the owning organization. 
+
+Short dynamic/static scanning utility list:
+ - Trivy
+ - Crype
+ - Clair
+ - Bench
+ - InSpec
+ - Qualys
+ - ```openscap-docker```
+ - Azure/AWS integrated features
+
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -177,13 +221,122 @@ Under Construction
 
 <h2 align="center">Branch Policy Considerations <a id="branch policy"></a></h2>
 
-Under Construction
+At a high level, the below list of configurations for branch policies should be considered when establishing a secure ADO repository. Establishing these policies will ensure that proposed merges are reviewed to completion, validated via build/test/scan procedures, don't allow destructive merge types, and stay connected to agreed upon work for a given work/sprint cycle. The finer details of these choices should be decided by the organizational leadership and engineering/cloud/security leadership for the platform in question. Finer details will be mentioned but not explored in depth.
+
+- Build Pipeline Validation
+- Linked Work Items
+- Minimum Number of Reviewers w/ Resolution
+- Automatically Included Reviewers
+- Merge Type Limits/Selections
+- Comment/Feedback Resolution
+- Status Checks
+- Path Filtering
+- Bypassing Branch Policies
+
+#### Build Pipeline Validation
+
+ADO supports the creation of 'build validation policies' to be referenced as a part of the PR process. Simply put, they reference a specified build pipeline, a trigger, a policy requirement, and a build expiration. This will allow a given PR to ensure that the selected build pipeline completed successfully, and that said build validation isn't stale. It is within the specified build pipeline that the specific elements of building, testing, and scanning will be engineered. 
+
+![alt text](screenshots/image-2.png)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+#### Linked Work Items
+
+This branch policy is very straightforward with numerous potential benefits. This ensures that no PR can be completed without a linked sprint work item. This support more formalized development practices, and ensures that agile best practices are represented in the SDLC within ADO.
+
+![alt text](screenshots/image-1.png)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+#### Minimum Number of PR Reviewers:
+
+In short, any changes in a proposed PR should not just be validated via automated build/test/scan procedures, but also by peer developers on the related development team. This procedure has become subject to new conversations with advancements in AI regaring the capabilities and expertise that can be baked into automated processes, and that line of thought certainly has merit. However, I argue that something that can't be automated away is a redundant understanding of the changes to a living codebase by the engineering team that is responsible for it. There are other soft benefits to having HitL PR review practices, but in short, it is still widely considered a best practice to establish a minimum peer count for PR reviews based on the needs and capacity of the engineering team that owns the related development process. 
+
+For ADO, this configuration is quick to set up for given branches in a repository. I reccomend this setting for the collaboration branch (develop) and live branch (main/master) to ensure efficient development efforts in feature branches, and thoroughly reviewed code in any shared or operational branches.
+
+There are several additional configurations that can be set for this requirement within ADO, included in the screen grab, and these are items that should be resolved by higher level security discussions as mentioned above. These decisions will likely be driven by the nature of the development effort, and development/business use case of the repository/engineering team (a POC repository for example).
+
+![alt text](screenshots/image.png)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+#### Automatically Included Reviewers
+
+Building off of the previous policy, you can also maintain a list of automatically included reviewers branches within an ADO repo. In practice, I suggest utilizing an ADO project team that contains the desired members that should be represented on every pull request. This may not be a necessary policy depending on the size of the projet or organization, and is to the discretion of the project leadership. If it is desired, leveraging a specific set of these required PR reviewing members can be very handy in ensuring this policy is enacted correctly.
+
+Below is a screen shot fo the reviewer policy blade.
+
+![alt text](screenshots/image-3.png)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+#### Merge Type Limits/Selections
+
+In my experience, the largest and most consistent benefit of this policy is that you greatly reduce the likelihood of inconsistent branch history in a given repository. Once again, the choices made on which merge types are allowed is a decision left to leadership, but in general making consistent choices for this policy will help solidify the stability of a given branch within a repository. I typically select squash merges only for collaboration and live branches to simplify the branch history, and not allow rebasing actions to break the common history between the collaboration and live branches. For situations where a large number of engineers are contributing to  a single repository, squash merges can introduce issues as there could possibly be multiple true bases for the repository. 
+
+The below screen shot includes the UI with MSFT provided descriptions of each option:
+
+![alt text](screenshots/image-4.png)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+#### Comment/Feedback Resolution
+
+Another quick configuration with potentially massive downstream impact. This will ensure that any active conversations aren't left unresolved when a PR is completed. Maintaining efficiency in this process really depends on the engineers involved in the conversation. I have typically leveraged dedicated time through a given day for PR reviews to ensure that no comments are left unresolved and ensure that the throughput of PRs is still maintained while any concerns from myself or other peers are addressed in a timely manner. 
+
+Screenshot included below:
+
+![alt text](screenshots/image-5.png)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+#### Status Checks
+
+This option can be as complex or simple as desired. In short, similar to the build validation policy, this setting is used to create and associate a status policy for the selected branch. The complexity of this policy really depends on the status element selected. The status service posting status updates to PRs being configured correctly is considered a pre-requisite in the same manner as the Build Validation/Build Pipeline relationship.
+
+This can extend into working with the PR Status API and other extensions of functionality. MSFT provided documentation for these areas can be found [within the ADO docs.](https://learn.microsoft.com/en-us/azure/devops/repos/git/pr-status-policy?view=azure-devops#configure-the-branch-policy)
+
+![alt text](screenshots/image-6.png)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+#### Path Filtering
+
+Path filtering on it's own extends into the less frequently needed area of branch policies, but it is a powerful configuration that can be leveraged for many of the previously discussed policies. A potential scenario for this setting could be a repository that houses multiple pieces of functionality named A, B, and C. If there are suites of build/test infrastructure related to those specific functionalities, then they should be included in build validation. In that case, distinct build validations may be neccesary to ensure that PRs touching any of those areas also reference the related build validations bvA, bvB, bvC, and so on.
+
+#### Bypassing Policies
+
+Typically a special case scenario, it may be neccesary to support PR or Push actions that bypass active branch policies. These permissions can be assigned to a specific user or project group. Similar to the automatically included PR reviewers configuration, it may be wise to have a dedicated group created for these actions, with sole access to this bypassed PR/Push route assigned to it as this permission allows for PRs and branch Push actions to be completed without passing any configured branch policies. 
+
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-<!-- Links, etc. -->
+
+
+<h1 align="center">Bibliography<a id="branch policy"></a></h1>
+
+- [Branch policies and settings](branch-policies-settings)
+- [Configure a branch policy for an external service](configure-branch-pol-ext-service)
+- [PR Status API](pr-status-api)
+- [Customize/Extend PR Workflows with PR status](cusotmize-ext-pr-workflows-statusapi)
+
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+
+
+    <!-- Links, etc. -->
+<!--bibliography links -->
+[branch-policies-settings]: https://learn.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops&tabs=browser#bypass-branch-policies
+[configure-branch-pol-ext-service]: https://learn.microsoft.com/en-us/azure/devops/repos/git/pr-status-policy?view=azure-devops#configure-the-branch-policy
+[pr-status-api]: https://learn.microsoft.com/en-us/rest/api/azure/devops/git/pull-request-statuses?view=azure-devops-rest-4.1
+[cusotmize-ext-pr-workflows-statusapi]: https://learn.microsoft.com/en-us/azure/devops/repos/git/pull-request-status?view=azure-devops
+<!--other links -->
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/jonathan-boyle/
 [craig-andrews-scap-writeup]: https://candrews.integralblue.com/2023/09/scap-security-and-compliance-scanning-of-docker-images-in-github-actions-and-gitlab-ci/#implementation

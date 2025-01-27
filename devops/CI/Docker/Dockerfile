@@ -14,7 +14,6 @@ RUN echo "### Linting Dockerfile ###" && /bin/hadolint --config /config/hadolint
 #---
 #--
 
-
 # Base image
 ARG DOTNET_VERSION=6.0
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine AS base
