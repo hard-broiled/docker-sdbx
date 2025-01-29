@@ -1,12 +1,20 @@
 <a id="readme-top"></a>
 
+<!-- 
+Status
+
+This write-up has several sections still 'under construction'. 
+This is largely due to a related effort to establish a locally hosted linux based environment for testing related GHA workflows and specific scripts for the OpenSCAP functionality, in hopes to include additional information from that effort.
+-->
+
+
 <!-- Shields Section -->
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 <div align="center">
     <h1 align="center">Continuous Integration for Containerized Applications with Docker</h1>
     <p align="center">
-        Guideline conversation to pursue CI best practices for maintaining custom docker images for containerized application development. Leveraging OpenSCAP implementation as a starting point as detailed in write-up by <a href="https://candrews.integralblue.com/2023/09/scap-security-and-compliance-scanning-of-docker-images-in-github-actions-and-gitlab-ci/#implementation">Craig Andrews</a>
+        Guideline to pursue SDLC best practices while preparing for CI best practices when maintaining custom docker images for containerized application development. Also includes considerations for leveraging OpenSCAP implementation within a GHA workflows, with reference to a related write-up by <a href="https://candrews.integralblue.com/2023/09/scap-security-and-compliance-scanning-of-docker-images-in-github-actions-and-gitlab-ci/#implementation">Craig Andrews.</a>
 </div>
 
 
@@ -24,10 +32,10 @@
                 <li><a href="#image b&p better frame">A Better Framework</a></li>
                 <li><a href="#image b&p pipe trigger">Trigger on Push with Filtering Considerations</a></li>
                 <li><a href="#image b&p scans">Utilization of Container Scan/Testing steps in the 'feature push' pipeline</a></li>
-                <li><a href="#image b&p perms">Granular Permissions</a></li>
+                <li><a href="#image b&p perms">Granular Pipeline Permissions</a></li>
             </ul>
             </li>
-            <li><a href="#app b&ut">CI for Application Build & Unit Testing</a></li>
+            <li><a href="#app b&ut">Application Build & Unit Testing Considerations</a></li>
             <li><a href="#branch policy">Branch Policy Considerations</a></li>
         </ul>
         </li>
@@ -38,32 +46,52 @@
 
 <h1 align="center">Overview <a id="overview"></a></h1>
 
-At a high level, the primary focus of this conversation is to target creating CI pipelines that will allow us to rapidly achieve build and push functionality for custom docker images. In addition to this, we want to ensure that these efforts start with considerations for long-term best practices to bake in mature CI/CD practices into development workflows as early as possible. Ideally we can endeavour to avoid the all too common enterprise maturation growth pain that is fully refactoring CI/CD practices that were implemented early on when rapid product releases were prioritized over all else.
+At a high level, the primary focus of this conversation is to target creating CI pipelines that will allow us to rapidly achieve build and push functionality for custom docker images. In addition to this, we want to ensure that these efforts start with considerations for long-term best practices to bake in mature CI/CD practices into development workflows as early as possible. Ideally we can endeavour to avoid the all too common enterprise maturation growth pain that is fully refactoring a CI/CD footprint and practices that were implemented early on when rapid product releases were prioritized over all else.
 
-This article is by no means a fully comprehensive conversation on included or mentioned topics. Additional resources will be provided throughout as are relevant and available.
+This conversation also builds towards the use of Docker and VMs for containerized development/deployment 'nodes' to be utilized as environments during the SDLC. I cover how we can leverage these resources within CI/CD to ensure consistent deployment target environments as we look to deploy containerized applications to these environments leading to production environments. This will leverage Docker in Docker (DinD) and Kubernetes in Docker (KinD) at the environment level.
+
+This article is by no means a fully comprehensive conversation on included or mentioned topics. In the future, additional write-ups and resources will be provided as they become available.
+
+<!-- 
 
 A brief list of considerations for CI pipeline topics is provided here for now, with expectations of additions in the future:
 
- - Image Build: build and push to registries, best practices for security, scanning, fingerprinting, private registries
+ - Image Build: build and push to registries, covering best practices for security, scanning, fingerprinting, private registries
     - Security scanning/hardening
-        - Docker bench
-        - Docker scap
+        - Docker Bench
+        - SCAP Considerations
+    - Monitoring
         - Prometheus/Grafana integrations
- - Application build & unit testing
+    - Orchestration Considerations
+        - kubectl & Helm for k8s orchestration
+        - Compose
+        - Swarm 
+ - Conversation on application build & unit testing
  - Branching policies to ensure all security requirements are met before merging into shared contexts
+ - ADO specific considerations
+    - repos
+    - branches
+    - permissions
+    - Azure container related offerings (application level vs environment level conversation)
+ 
+
+ -->
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-<h2 align="center">CI for Docker Image Build/Push <a id="image b&p"></a></h2>
+<h2 align="center">CI for Docker Image Build/Push<a id="image b&p"></a></h2>
 
 - Image Build: build and push to registries, best practices for security, scanning, fingerprinting, private registries
     - Security scanning/hardening
         - Docker Bench
-        - Docker SCAP (not a trivial process)
+        - Docker SCAP (not a trivial or universal solution)
         - Docker Scout
-        - Prometheus/Grafana Considerations
+    - Monitoring
+        - Prometheus Considerations, other similar vendors
+        - Vis. with Grafana 
+
 
 ### Base Functionality <a id="image b&p base func"></a>
 
@@ -80,7 +108,7 @@ If adhering to best practices was that simple, everyone would do it. So let's ex
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-### A Better Framework <a id="image b&p better frame"></a>
+### A Better Framework<a id="image b&p better frame"></a>
 
 Let me start this sections by acknowledging the write up on SCAP integration into CI processes by [Craig Andrews.](craig-andrews-scap-writeup)
 Not only does Craig's write-up contain excellent information, we can also map the situation we are addressing to the use-case of his work quite well. Since we seek to solve as general a use case as possible, leveraging linux-based execution environments within GHA and ADO will yeild maximum coverage when looking to leverage SCAP in particular.
@@ -108,7 +136,7 @@ Some quick improvements we can make to this image build pipeline include the fol
                 - Allows for specific use-case considerations to be prioritized 
                     - SCAP scans for industry specific compliance
     
-*Note:* For the following sections, we presume that the CI running environment is configured correctly to allow for any mentioned additional utilities to be utilized. Additional conversation on setting up CI environments for those utilities may follow in this or other write-ups in the future.
+*Note:* For the following sections, we presume that the CI environment is configured correctly to allow for any mentioned additional utilities to be utilized. Additional conversation on setting up this or similar CI environments to follow.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -122,14 +150,33 @@ on:
 
 The trigger filter can be as simple as the above if we want to ensure this pipeline runs for any push actions in the repository. There are always more options for creating more specific filters for something like feature branches and other conditional situations. Those can be accomodated as the project evolves, but for now a broader net at this step of the pipeline is a good starting configuration.
 
+If the CI/CD process is later segmented to include distinct pipelines or workflows for the container/orchestration files vs the codebase itself, then filtering would play a key role in ensuring that any given CI/CD pipeline targets the elements of the codebase it is intended for.
 
-<!-- Some potential assumptions for this section could include the below list. These assumptions could be a part of a separate conversation that wil be saved for a different time. 
-These assumptions include:
- - Standardized feature branch naming patterns 
-    - Quick Example: feature/dockerfile_app-name_work-item
- - Standardized Dockerfile directory patterns
-    - Dockerfiles are always placed at the root directory, or a known location to support directory location filtering
-        - Quick non-root Example: ```/Docker/Dockerfile``` -->
+A quick example of this:
+ - Established patterns for standardized feature branch naming patterns 
+    - feature/dockerfile_*app-name*_*work-item*
+ - Established Dockerfile directory patterns
+    - Dockerfiles are always placed at the root directory
+        - ```/Dockerfile ```
+        - Potential configuration:
+            - ``` 
+                on:
+                    push:
+                        paths:
+                        - Dockerfile
+              ```
+    - Dockerfiles are placed within a known directory
+        - Potential configuration:
+        - ```/Docker/Dockerfile```
+            - ``` 
+                on:
+                    push:
+                        paths:
+                        - Docker/**
+              ```
+ 
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 ### Utilization of Container Scan/Testing steps in the 'feature push' pipeline  <a id="image b&p scans"></a>
@@ -140,7 +187,10 @@ These assumptions include:
  - Leverage SCAP steps for security hardening
  - Leverage Docker Scout for scanning, considerations on usage scenarios
 
-### Granular Permissions  <a id="image b&p perms"></a>
+ <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+### Granular Pipeline Permissions  <a id="image b&p perms"></a>
 
 Under Construction
 
@@ -162,11 +212,13 @@ GitHub Actions Packages permissions:
 
 
 
-<h2 align="center"> CI for Application Build & Unit Testing <a id="app b&ut"></a></h2>
+<h2 align="center">Application Build & Unit Testing Considerations<a id="app b&ut"></a></h2>
 
-        Under construction TODO
+### Overview
 
-The high level goals of this area of the CI workflow are to ensure that the codebase is able to successfully build, pass all included unit tests, and pass any included static/dynamic code scanning utilities leveraged by the project. The scanning elements of this process are external to the docker container and development/test environment, and will be considered in a separate conversation accordingly. 
+The high level goals of this area of CI support are to ensure that the codebase is able to successfully build, pass all included unit tests, and pass any static/dynamic code scanning utilities leveraged by the project. 
+
+*Note* The scanning elements of this process are external to the application docker container and any development/test environment. 
 
 Let's consider a simplified (not comprehensive) example of a docker container that leverages multi-stage builds to target the following stages:
 - Development Build
@@ -184,24 +236,59 @@ FROM live_base_image AS live_base
 ### build from the dev_build image
 # Dev Build Stage
 FROM dev_base AS dev_build
+-- build actions
 
 ### Execute units tests leveraging development base image
 # Dev Test Stage
 FROM dev_base AS dev_test
+-- copy files from build and execute included unit tests
 
 ### Start-up elements from development build after testing 
 # Development Push Stage
 FROM dev_build AS development
+-- copy files from build for development stage
 
 ### Start-up elements from tested build stage in specified live image
 # Live Push Stage
 FROM live_base AS live
+-- copy files from build for live stage
 ```
 
-When we look to leverage the above docker file as a part of our CI process, we can target the specific 'dev_build' and 'dev_test' stages to support our build and test functionality. 
-This will allow us to ensure that all requirements for each stage of the CI process are fulfilled and validated against consistent versions of the application being built and test as configured by the related stages within the docker container. We can additionally add to the functionality contained within the dockerfile to support code coverage, static&dynamic code scanning, and other functionality as required by the owning organization. 
+When we look to leverage the above docker file as a part of a CI process, we can target the specific 'dev_build' and 'dev_test' stages to distinctly target and support our build and test functionality. 
+This will ensure that related branch policies as well as independent testing and scanning requirements are fulfilled by a consistent version of the application. We can additionally add to the functionality contained within the dockerfile to support code coverage, static & dynamic code scanning, and other functionality as required. 
 
-Short dynamic/static scanning utility list:
+### Application Testing
+
+Leveraging any included unit tests for a containerized application will inherently be tech stack dependent, but there are some universal goals we can target for this process.
+
+#### Running Unit Tests Multiple Times During CI
+
+Why? In short, we can look at executing included unit tests for an application to ensure the application itself passes as well as executing the same tests within the container to ensure no environmental issues are missed.
+
+The implementation of this tactic should be motivated by ensuring that the application itself is thoroughly tested by any included or available unit tests, and that any differences in performance or behavior of the application are caught by unit testing the application within a container that aligns with those utilized for development collaboration stages (DEV, INTG etc.) as well as the UAT, PROD, and TRNG environments as leveraged by the project. There will be some differences in required considerations between different development stacks, as some technologies have best practices or vendor recommendations that specific base container images be used for development and similar lower environments versus PROD or live environments (e.g. .NET).
+
+Ideally we can imagine a development workflow that has a developer execute available unit tests locally as a part of their process to merge changes to their feature branch, with merge and PR policies and triggers in place to execute the same or an expanded bank of unit tests (as available) against the updated image before allowing the PR to be completed. 
+
+Quick example of GHA workflow triggers for this purpose:
+```
+on:
+  push:
+    branches:
+      - feature-branch/*
+  pull_request:
+    branches:
+      - feature-branch/*
+      - develop
+```
+
+More specific triggers could be included for workflow jobs that target tests included in the application code base, or others as needed. Within those jobs we can also look to test the resultant image in isolation, or as it integrates with the exising available project infrastructure or code base. Leveraging environment specific configurations, parallelized testing, workflow strategies, will also enhance the testing coverage while minimizing the possibility for differences seen in results between utilized environments. 
+
+There are also decisions to be made on actions these being executed by jobs within larger workflows, or separate workflows that are called by a driving workflow. Earlier organizations will likely start with the former, progressing to the latter as their DevOps process matures.
+
+
+### Scanning 
+
+Incomplete dynamic/static scanning utility list:
  - Trivy
  - Crype
  - Clair
@@ -219,7 +306,7 @@ Short dynamic/static scanning utility list:
 
 
 
-<h2 align="center">Branch Policy Considerations <a id="branch policy"></a></h2>
+<h2 align="center">Branch Policy Considerations<a id="branch policy"></a></h2>
 
 At a high level, the below list of configurations for branch policies should be considered when establishing a secure ADO repository. Establishing these policies will ensure that proposed merges are reviewed to completion, validated via build/test/scan procedures, don't allow destructive merge types, and stay connected to agreed upon work for a given work/sprint cycle. The finer details of these choices should be decided by the organizational leadership and engineering/cloud/security leadership for the platform in question. Finer details will be mentioned but not explored in depth.
 

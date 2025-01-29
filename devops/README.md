@@ -33,21 +33,24 @@ README is currently **Under Construction**
 
 Considerations for the following topics (un-ordered):
  - CI & CD platforms
-    - GHA
-    - ArgoCD
-    - Jenkins consideration
-    - Azure ADO
+    - GHA (overview, separate article)
+    - ArgoCD (overview, later separate article)
+    - Jenkins consideration (overview, later separate article)
+    - Azure ADO (overview, separate article)
  - CI Pipelines
     - Image Build: build and push to registries, best practices for security, scanning, fingerprinting, private registries
         - Image build and registry push
             - Security scanning/hardening
-                - Docker bench
-                - Docker scap
+                - Docker bench & scout conversation
+                - SCAP options
                 - Prometheus
     - Application build & unit testing
                 
  - CD Pipelines
     - Orchestration service
+        - compose/swarm for single vendor considerations
+        - k3s overview (IoT emphasis)
+        - k8s
  - Azure deployments of applications
     - IaC considerations
     - Use cases for the following:
@@ -55,19 +58,21 @@ Considerations for the following topics (un-ordered):
         - ACI
         - AKS
         - WebApps/Function Apps
+        - Overview on cloud provider options vs customized docker workflows with directly managed orchestration
  - VM Focused Deployment Workflow
     - Deployment Workflow Node with necessary tooling (docker engine, orchestration, monitoring/visibility considerations, etc.)
         - Non-prod vs prod considerations
- - 'Development' environment deployment support, initial example for full workflows  
+        - Major providers vs not; freeware considerations
+ - 'Development' environment deployment support, initial example for full workflows
+    - starting with conversations on Azure hosting; freeware for local quick set up; AWS
  - IaC Considerations
     - VM stability
         - IaC tooling selection, Config as Code selection
-            - Terraform/Ansible pairing
+            - Terraform/Ansible together and separate
             - ARM templates
-            - Blending others
  - Continuing conversations
-    - DinD use cases
-    - KinD use cases 
+    - DinD considerations
+    - KinD considerations (freeware deployment node amongst other scenarios)
 
     
 

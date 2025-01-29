@@ -8,7 +8,7 @@
 <div align="center">
     <h2 align="center">Docker SDBX Repository</h2>
     <p align="center">
-        A non-modal repository utilized for rapid prototyping and testing of specific Docker functionality and corresponding GHA CI support.
+        A non-modal repository utilized for rapid zero-cost prototyping and showcasing specific Docker, Orchestration, and CI/CD functionality with corresponding write-ups.
     </p>
 </div>
 
@@ -35,20 +35,25 @@
 
 # Overview <a id="overview"></a>
 
-The two primary purposes of this repository are as follows:
-1. Rapidly prototype, test, and showcase Docker support and functionality across broad development and deployment settings
-2. Rapidly test and prototype GHA support for these Docker scenarios
+The primary purposes of this repository are currently as follows:
+* Rapidly prototype, test, and showcase specific elements of Docker, k8s/Orchestration, & CI/CD support and functionality across broad SDLC and CI/CD settings
+* Host write-ups related to these specific elements in SDLC & CI/CD contexts
+* 'Show my process' related to creating these write-ups or documentation elements on all contained topics and technologies to give insight to my approaches and philosophies related to CI/CD, DevOps, SDLC, and other related SWE topics 
 
-This repo and contained projects straddle the line between development and operations, without expanding that position enough to fully embody DevOps simply due to a contained scale. I feel it is targeting a sweet spot between the development/ops and DevOps that is fitting for the world of "personal rapid prototypes" in an experimental way. 
+This repo and contained projects/write-ups will often straddle the line between development and operations. However, no single article is intented to expanded that position enough to fully embody DevOps. Rather, the repo as a whole will house many of these conversations that contribute towards a DevOps mindset and related approaches. 
 
-I would describe this repo and contained efforts as 
+I feel the contents of this repo target a sweet spot between distinct considerations for development and operations, and greater considerations for DevOps that is fitting for the world of "rapid prototypes" with considered routes towards mature projects and organizations that leverage best practices in both the SDLC and DevOps. 
+
+Inteded distribution of contained efforts:
 - 10% Development considerations 
 - 20% Ops considerations
-- 70% Comprehensive documentation considerations.
+- 70% Comprehensive write-up & documentation
 
-For any given feature branch, the enhancement and optimization of the CI process will be the most significant effort in the long term after documentation of each feature branch has been initialized. As the full set of feature branches will cover a broad set of development technologies, this should yield a useful and demonstrative collection of optimal implementations of CI for many development contexts that are utilizing Docker in the development workflow.
+For any given feature branch or topic, the enhancement and optimization of contained CI/CD processes will be the most significant effort in the long term after the write-up/documentation of related topics has been initialized. As the full set of feature branches will cover a broad set of development technologies, this should yield a useful and demonstrative collection of conversations with optimal implementations of CI/CD for many development contexts that are utilizing Docker in the SDLC or CI/CD workflows.
 
-This is currently considered the primary value output of this repository.
+Write-ups (in README form) are currently considered the primary value output of this repository and effort. 
+
+I also note, many elements of my approach for write-ups as 'articles' needs work, I ask for forgiveness in advance on that front.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -56,24 +61,25 @@ This is currently considered the primary value output of this repository.
 ### On Codebase Management <a id="codebase-mgmt"></a>
 
 This repo does ***not*** follow best practices for code base management. Specifically realted to modality, and feature branch management. 
-This repo will contain multiple feature branches that are not intended to be pushed, but rather exist as landing points and examples for rapid projects or implementation considerations. 
-It will also not be modal, instead containing many different projects and potential development directions. 
+* This repo will contain multiple feature branches that may not be intended for merging, but rather exist as landing points and examples for rapid projects or implementation considerations.
+    * These branches will be the closest I get to 'How-Tos' in this repository
+* This repo is not modal, instead containing many different projects and potential development directions to support a broader set of topics for write-ups. 
 
-Projects and efforts contained in this repo may eventually be spun off into more mature implementations in-which code base (and other) best practices will be followed. 
-For any projects that go this route, links to the mature version will be included in this readme, as well as the related feature branch(es) within this repo.
+Projects and efforts contained in this repo may eventually be spun off into more mature implementations in-which code base management (and other) best practices will be followed. 
+For any projects that go this route, links to the mature version will be included in this readme or related write-ups, as well as the related feature branch(es) within this repo.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-### Local Docker vs Cloud Orchestration Offerings <a id="local-vs-cloud"></a>
+### Local/VM Hosted Docker Containers vs Cloud Orchestration Offerings <a id="local-vs-cloud"></a>
 
-Implementations in this repository intentionally avoids any major cloud providers, opting for smaller scale hosting scenarios. 
+Implementations in this repository will initially avoid major cloud providers for deployment environments as well as docker/container related offerings, opting for smaller scale hosting scenarios. 
 
-The low level influence for this choice is the reality of this being a small scale project focused on rapid prototyping/implementation mandating zero-cost implementation choices and minimal upfront overhead.
+Currently, two considerations motivate this choice:
+* The reality of this being a small scale project focused on rapid prototyping/implementation to support articles/write-ups targeting zero-cost implementation choices and minimal upfront overhead
+* Avoiding obfuscation of Docker capabilities and configuration often encountered in cloud platform orchestration offerings
 
-The higher level motivation is to avoid any obfuscation of Docker capabilities or features often encountered in cloud platform orchestration offerings.
-
-Eventually, documentation will be updated to reflect how similar end results could be acheived via popular cloud platforms such as Azure, AWS, DigitalOcean etc.
+Eventually, write-ups will be created to reflect how similar results could be acheived via popular cloud platforms.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -81,34 +87,62 @@ Eventually, documentation will be updated to reflect how similar end results cou
 ### Considered Technology Stacks <a id="tech-stacks"></a>
 
 Some quick taxonomy related to this project. 
- - "Project Technologies"
-    - All technologies included for any given feature branch or related project. This is meant to include the tech stack utilized in the contained app or feature, as well as any containerization or orchestration technologies utilized up to and including CI support for that project.
- - "Development Technologies"
-    - The tech stack of the contained app/feature for a given feature branch 
+ - Technology specific directories
+    - These directories will house containerization and orchestration examples for example applications in the mentioned tech stack
+    - Contained README files will explore how the SDLC could look while utilizing these example containerization/orchestration files
+    - Brief example of this organizational model:
+    ```
+        - dotnet/
+            - Dockerfile
+            - k8s.yml
+            - compose.yml
+            - README.md write-up on example dotnet centric SDLC leveraging included files
+        - python/
+            - Dockerfile
+            - k8s.yml
+            - compose.yml
+            - README.md write-up on example python centric SDLC leveraging included files
+    ```
+ - Topic specific directories
+    - More conversationally oriented as there isn't a single implied tech stack for these topics
+    - Each topic will likely contain sub-topics with write-ups for local/environment tooling, utility set-up etc. as is found to be necessary to support more comprehensive coverage of the topic
+    - There will also be specific technologies that come up within certain topics (devops/CI/Docker) to facilitate specific use case considerations for that technology within that topic 
 
-Primary development technologies to be targeted at this time (in no particular order) will include dotnet/C#, Python, Go, and C++ while also considering additional front-end specific technologies. This should be considered a living list.
+The below list of specific development technologies and related conversations to be targeted will grow over time. Currently it includes (in no particular order):
+* .NET/C#
+* Javascript
+* Python
+* C++
 
-<!-- emphasizing this section in particular -->
+Currently considered additions to this topic list:
+* Go
+* Typescript
+* FastAPI vs Flask vs Django Considerations
+* Minimal API vs MVC Considerations
+* DB providers and Volume Considerations (sqlite, postgres, MongoDB, SQL vs NoSQL)
+* Front End & Back End Orchestration
+
 ***Please note!***
-Several of the contained app/feature codebases are not my own work. They have been pulled from example repositories or tutorial efforts related to the primary technologies contained in the related codebases. These were leveraged to decrease the turn-around time for creating viable Docker images/containers in more numerous scenarios.
+Several of the contained app/feature codebases are not my own work. They have been pulled from example repositories or tutorials related to the primary technologies contained in the related projects & feature branches. These were leveraged to decrease the turn-around time for creating viable Docker images/containers in more development contexts.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 ### On CI/CD Support <a id="cicd-support"></a>
 
-Following the previous statement regarding zero-cost implementations, GitHub and GHA were chosen as the repository host and CI/CD support vendors. 
+Following the previous statement regarding zero-cost implementations, GitHub and GHA are initially targeted as the repository host and CI/CD vendors. 
 
-The primary consideration for CI has been ensuring each feature branch can produce related and successful Docker Images/Containers for the contained code bases. Any contained GHA pipelines are set to trigger on successful merges to the contained feature branch only. 
+The primary consideration for CI has been ensuring each feature branch can produce functional Docker Images/Containers for the contained code bases. Any contained GHA pipelines will be set to trigger on successful merges to the contained feature branch only. Once more mature zero-cost deployment environment infrastructure has been set up related to this project, these containers will be deployed to small but scalable k8s instances within said environment(s).  
 
-As mentioned previously, enhancement and optimization of the CI process will be the most significant effort in the long term after documentation of each feature branch has been initialized.
+As mentioned previously, enhancement and optimization of the CI process will be targeted in the long term after write-ups related to the contents of each feature/topic branch have been initialized.
 
-In this scenario, "CD" won't be fully built out in many aspects. The initial purpose will be targeting smaller scale orchestration implementations (k3s w/ docker backend etc.) to keep things light and quick. There is room for growth into more mature service providers (ArgoCD, Ansible, etc.) for stability and CD-specific reproducibility and configuration. In the sem vein, there is immense room for growth into other CD areas including observability, monitoring, security, scalability, distribution, etc. 
+In a similar vein, CD capabilities will be targeted in the long term after initial articles or write-ups are completed. The initial efforts in this area will be exploring smaller scale orchestration implementations to keep things light and quick and to stay true to the comprehensive zero-cost approach mentioned above. There will be room for growth into more mature service providers for stability and CD-specific reproducibility and configuration, ideally targeting expectations found in larger organizations. Similarly, there will be efforts put towards growth into other CD areas including observability, monitoring, security, scalability, distribution, etc. 
 As the current goal isn't targeting public facing CD, it hasn't been prioritized at this time. 
 
-It should be noted that there are free-tier options that allow for repo hosting and CI/CD within Azure. These would of course simplify much of the burden, especially within CI/CD, regarding a more mature implementation of supporting any app/project via Docker and k8s. 
-The initial project support overhead for these routes at this time doesn't fit with the goal of rapidly prototyping unobfuscated Docker functionality. Also, I've used my free azure trial credits years ago, and working around that is a pain for this scale of project.
-Also, juggling deployment agents, and k8s implementations on the Azure free tier is not a useful exercise for something of this scale.
+* __On Azure offerings__: 
+It should be noted that there are free-tier options that allow for repo hosting and CI/CD within Azure. In some scenarios these *may* simplify processes mentioned in contained write-ups including CI/CD, supporting apps/project still leveraging Docker and k8s. 
+At a later date, write-ups covering the use of Azure and other major cloud providers for related efforts will be produced.
+Initial efforts prioritize the goal of rapidly prototyping *unobfuscated* Docker functionality. ... *and*, I've used my free Azure trial credits previously. Juggling VMs to work with custom pipeline agents alongside k8s instances can be a pain when targeting zero-cost.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
